@@ -6,5 +6,6 @@
         <Label Content="XXXXXXXXX"></Label>
         <CheckBox Content="Please click me" />
         <CheckBox Content="Please click me f5" />
+        <CheckBox Content="Please click me5" />
     </Grid>
 </Window>
