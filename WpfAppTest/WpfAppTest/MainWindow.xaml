@@ -3,6 +3,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     Title="MainWindow" Height="500" Width="500">
     <Grid>
-        
+        <Label Content="XXXXXXXXX"></Label>
+        <CheckBox Content="Please click me" />
     </Grid>
 </Window>
