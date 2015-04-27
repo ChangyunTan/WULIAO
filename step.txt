@@ -1,1 +1,2 @@
 step1: init.
+step2: add project.
