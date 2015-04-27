@@ -1,3 +1,4 @@
 step1: init.
 step2: add project.
 step3: strat f3
+step4: update file.
