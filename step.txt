@@ -3,3 +3,4 @@ step2: add project.
 step3: strat f3
 step4: update file.
 step5: add control.
+step6: add control.
