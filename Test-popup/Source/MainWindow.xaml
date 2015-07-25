@@ -1,0 +1,17 @@
+﻿<Window x:Class="WpfApplication2.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:local="clr-namespace:WpfApplication2.CustomTreeView"
+        Title="MainWindow" Height="500" Width="900">
+    <Window.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="Themes/OperatorDetailsContent.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </Window.Resources>
+    <Grid>
+        <local:PropertyTreeView x:Name="tree" Width="500" PropertyDefinitions="{StaticResource DetailDefinitionData_Operation}"
+                                Style="{StaticResource OperatorStatisticsTreeviewStyle}"/>
+    </Grid>
+</Window>

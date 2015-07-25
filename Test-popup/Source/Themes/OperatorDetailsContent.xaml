@@ -1,0 +1,665 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:local="clr-namespace:WpfApplication2.Data" 
+                    xmlns:Model="clr-namespace:WpfApplication2.CustomTreeView">
+    <ResourceDictionary.MergedDictionaries>
+        <ResourceDictionary Source="OperatorDetailsStyle.xaml"/>
+    </ResourceDictionary.MergedDictionaries> 
+    <!--TreeViewItemTemplate="{StaticResource OperatorDetailMultiItems}"-->
+    <Model:CollectionProperty x:Key="MissingIndexCollection"> 
+       <Model:PropertyDefinition HaveIcon="True" Path="." Caption="Missing IndexGroup" ContentDataTemplate="{StaticResource  MissingIndexesGorupHeader}"> 
+           <Model:PropertyDefinition Path="Impact"/>
+            <Model:CollectionDefinition Path="MissingIndex" ItemSource="MissingIndex"  DataType="{x:Type local:MissingIndexTypeDto}"> 
+               <Model:PropertyDefinition Path="." ContentDataTemplate="{StaticResource MissingIndexesHeader}"> 
+                   <Model:PropertyDefinition Path="Schema"/> 
+                   <Model:PropertyDefinition Path="Database"/> 
+                   <Model:PropertyDefinition Path="Table"/>
+                    <Model:CollectionDefinition Path="ColumnGroup" ItemSource="ColumnGroup" TreeViewItemTemplate="{StaticResource OperatorDetailMultiItems}" DataType="{x:Type local:ColumnGroupTypeDto}"> 
+                       <Model:PropertyDefinition Path="." Caption="Column Group" ContentDataTemplate="{StaticResource  MissingIndexesDisplayColumnGroup}">
+                            <Model:CollectionDefinition Path="ColumnList" ItemSource="ColumnList" TreeViewItemTemplate="{StaticResource OperatorDetailMultiItems}" DataType="{x:Type local:ColumnTypeDto}"> 
+                               <Model:PropertyDefinition Path="." HeaderDataTemplate="{StaticResource MissingIndexesDisplayTableColumnName}" ContentDataTemplate="{StaticResource MissingIndexesDisplayTableColumnValue}"/> 
+                           </Model:CollectionDefinition> 
+                       </Model:PropertyDefinition> 
+                   </Model:CollectionDefinition> 
+               </Model:PropertyDefinition> 
+           </Model:CollectionDefinition> 
+       </Model:PropertyDefinition> 
+   </Model:CollectionProperty> 
+
+   <Model:CollectionProperty x:Key="SummaryDefinitionData_Operation"> 
+       <Model:SessionDefinition> 
+           <Model:PercentageDefinition Path="EstimatedCPU" PathPercentage="EstimatedCPUPercentage" /> 
+           <Model:PercentageDefinition Path="EstimatedTotalSubtreeCost" PathPercentage="EstimatedTotalSubtreeCostPercentage" /> 
+           <Model:PropertyDefinition Path="MemoryGrant"/> 
+       </Model:SessionDefinition> 
+       <Model:SessionDefinition> 
+           <Model:PropertyDefinition Path="Warnings"/> 
+       </Model:SessionDefinition> 
+   </Model:CollectionProperty> 
+
+   <Model:CollectionProperty x:Key="DetailDefinitionData_Operation">
+        <Model:SessionDefinition>
+            <Model:PercentageDefinition Path="EstimatedCPU" PathPercentage="EstimatedCPUPercentage" /> 
+           <Model:PercentageDefinition Path="EstimatedTotalSubtreeCost" PathPercentage="EstimatedTotalSubtreeCostPercentage" /> 
+           <Model:PropertyDefinition Path="CachedPlanSize" ContentDataTemplate="{StaticResource OperatorDetailDataSizeDisplay}"/> 
+           <Model:PropertyDefinition Path="CompileCPU"/> 
+           <Model:PropertyDefinition Path="CompileMemory"/> 
+           <Model:PropertyDefinition Path="CompileTime"/> 
+           <Model:PropertyDefinition Path="DegreeOfParallelism"/> 
+           <Model:PropertyDefinition Path="EffectiveDegreeOfParallelism"/> 
+           <Model:PropertyDefinition Path="NonParallelPlanReason"/> 
+           <Model:PropertyDefinition Path="MemoryGrant"/> 
+           <Model:PropertyDefinition Path="MemoryGrantInfo"/> 
+           <Model:PropertyDefinition Path="OptimizerHardwareDependentProperties"/> 
+           <Model:PropertyDefinition Path="ParameterList"/> 
+           <Model:PropertyDefinition Path="GuessedSelectivity"/> 
+           <Model:PropertyDefinition Path="InternalInfo"/> 
+           <Model:PropertyDefinition Path="ReceivePlanOperationType"/> 
+           <Model:PropertyDefinition Path="CursorPlanOperationType"/> 
+           <Model:PropertyDefinition Path="CardinalityEstimationModelVersion"/> 
+           <Model:PropertyDefinition Path="PhysicalOperator"/> 
+           <Model:PropertyDefinition Path="LogicalOperator"/> 
+       </Model:SessionDefinition>
+        <Model:SessionDefinition> 
+           <Model:CollectionDefinition Path="MissingIndexes.MissingIndexGroup" ItemSource="MissingIndexes.MissingIndexGroup" 
+                                       TreeViewItemTemplate="{StaticResource OperatorDetailMultiItems}"
+                                       DataType="{x:Type local:MissingIndexGroupTypeDto}" Children="{StaticResource MissingIndexCollection}"/>
+            <!--<Model:PropertyDefinition Path="UnmatchedIndexes"/> --> 
+       </Model:SessionDefinition> 
+       <!--<Model:SessionDefinition> 
+           <Model:PropertyDefinition Path="UsePlan"/> 
+       </Model:SessionDefinition> 
+       <Model:SessionDefinition> 
+           <Model:PropertyDefinition Path="ThreadStat"/> 
+       </Model:SessionDefinition> 
+       <Model:SessionDefinition> 
+           <Model:PropertyDefinition Path="Warnings"/> 
+       </Model:SessionDefinition>--> 
+   </Model:CollectionProperty> 
+
+   <Model:CollectionProperty x:Key="SummaryDefinitionData_RelOp"> 
+       <Model:SessionDefinition> 
+           <Model:PropertyDefinition Path="PartitioningType"/> 
+           <Model:PropertyDefinition Path="ActualExecutions" ContentDataTemplate="{StaticResource OperatorDetailDigitDisplay}"/> 
+           <Model:PropertyDefinition Path="EstimatedExecutions" ContentDataTemplate="{StaticResource OperatorDetailDigitDisplay}"/> 
+           <Model:PropertyDefinition Path="ExecutionsRelativeDiscrepancy"/> 
+           <Model:PropertyDefinition Path="ActualRows" ContentDataTemplate="{StaticResource OperatorDetailDigitDisplay}"/> 
+           <Model:PropertyDefinition Path="EstimatedRowsAccumulated" ContentDataTemplate="{StaticResource OperatorDetailDigitDisplay}"/> 
+           <Model:PropertyDefinition Path="RowsAccumulatedRelativeDiscrepancy"/> 
+           <Model:PercentageDefinition Path="EstimatedCPU" PathPercentage="EstimatedCPUPercentage" /> 
+           <Model:PercentageDefinition Path="EstimatedIO" PathPercentage="EstimatedIOPercentage" /> 
+           <Model:PercentageDefinition Path="EstimatedCost" PathPercentage="EstimatedCostPercentage" /> 
+           <Model:PercentageDefinition Path="EstimatedTotalSubtreeCost" PathPercentage="EstimatedTotalSubtreeCostPercentage" /> 
+           <Model:PropertyDefinition Path="EstimatedRowSize" ContentDataTemplate="{StaticResource OperatorDetailDataSizeDisplay}"/> 
+           <Model:PropertyDefinition Path="ActualDataSize" ContentDataTemplate="{StaticResource OperatorDetailDataSizeDisplay}"/> 
+           <Model:PropertyDefinition Path="EstimatedDataSize" ContentDataTemplate="{StaticResource OperatorDetailDataSizeDisplay}"/> 
+           <Model:PropertyDefinition Path="DataSizeRelativeDiscrepancy"/> 
+           <Model:PropertyDefinition Path="ActualRebinds"/> 
+           <Model:PropertyDefinition Path="ActualRewinds"/> 
+           <Model:PropertyDefinition Path="ManyToMany"/> 
+            <Model:PropertyDefinition Path="DMLRequestSort"/> 
+            <Model:PropertyDefinition Path="Ordered"/> 
+            <Model:PropertyDefinition Path="Partitioned"/> 
+            <Model:PropertyDefinition Path="ActualPartitionCount"/> 
+            <Model:PropertyDefinition Path="ActualPartitionsAccessed"/> 
+        </Model:SessionDefinition> 
+        <Model:SessionDefinition> 
+            <Model:PropertyDefinition Path="RemoteQuery"/> 
+            <Model:PropertyDefinition Path="RemoteObject"/> 
+        </Model:SessionDefinition> 
+        <Model:SessionDefinition> 
+            <Model:PropertyDefinition Path="Object"/> 
+            <Model:PropertyDefinition Path="Distinct"/> 
+            <Model:PropertyDefinition Path="OffsetExpression"/> 
+            <Model:PropertyDefinition Path="TopExpression"/> 
+            <Model:PropertyDefinition Path="Rows"/> 
+        </Model:SessionDefinition> 
+        <Model:SessionDefinition> 
+            <Model:PropertyDefinition Path="SeekPredicate"/> 
+            <Model:PropertyDefinition Path="SeekPredicates"/> 
+            <Model:PropertyDefinition Path="Predicate" ContentDataTemplate="{StaticResource OperatorDetailScalarExpressionTypeDisplay}"/> 
+        </Model:SessionDefinition> 
+        <Model:SessionDefinition> 
+            <Model:PropertyDefinition Path="GroupBy"/> 
+            <Model:PropertyDefinition Path="HashKeysProbe"/> 
+            <Model:PropertyDefinition Path="Values"/> 
+        </Model:SessionDefinition> 
+        <Model:SessionDefinition> 
+            <Model:PropertyDefinition Path="OuterReferences"/> 
+            <Model:PropertyDefinition Path="PartitionColumns"/> 
+        </Model:SessionDefinition> 
+        <Model:SessionDefinition> 
+            <Model:PropertyDefinition Path="TopExpression"/> 
+        </Model:SessionDefinition> 
+        <Model:SessionDefinition> 
+            <Model:PropertyDefinition Path="OrderBy"/> 
+        </Model:SessionDefinition> 
+        <Model:SessionDefinition> 
+            <Model:PropertyDefinition Path="HashKeys"/> 
+        </Model:SessionDefinition> 
+        <Model:SessionDefinition> 
+            <Model:PropertyDefinition Path="OutputList" ContentDataTemplate="{StaticResource OperatorDetailColumnReferenceListTypeDisplay}"/> 
+        </Model:SessionDefinition> 
+        <Model:SessionDefinition> 
+            <Model:PropertyDefinition Path="Warnings"/> 
+        </Model:SessionDefinition> 
+    </Model:CollectionProperty> 
+ 
+    <Model:CollectionProperty x:Key="DetailDefinitionData_RelOp"> 
+        <Model:SessionDefinition> 
+            <Model:PropertyDefinition Path="PhysicalOperator"/> 
+            <Model:PropertyDefinition Path="LogicalOperator"/> 
+            <Model:PropertyDefinition Path="PartitioningType"/> 
+            <Model:PropertyDefinition Path="ActualExecutions" ContentDataTemplate="{StaticResource OperatorDetailDigitDisplay}"/> 
+            <Model:PropertyDefinition Path="EstimatedExecutions" ContentDataTemplate="{StaticResource OperatorDetailDigitDisplay}"/> 
+            <Model:PropertyDefinition Path="ExecutionsRelativeDiscrepancy"/> 
+            <Model:PropertyDefinition Path="ActualRows" ContentDataTemplate="{StaticResource OperatorDetailDigitDisplay}"/> 
+            <Model:PropertyDefinition Path="EstimatedRowsAccumulated" ContentDataTemplate="{StaticResource OperatorDetailDigitDisplay}"/> 
+            <Model:PropertyDefinition Path="RowsAccumulatedRelativeDiscrepancy"/> 
+            <Model:PercentageDefinition Path="EstimatedCPU" PathPercentage="EstimatedCPUPercentage" /> 
+            <Model:PercentageDefinition Path="EstimatedIO" PathPercentage="EstimatedIOPercentage" /> 
+            <Model:PercentageDefinition Path="EstimatedCPU" PathPercentage="EstimatedCPUPercentage" /> 
+            <Model:PercentageDefinition Path="EstimatedTotalSubtreeCost" PathPercentage="EstimatedTotalSubtreeCostPercentage" /> 
+            <Model:PropertyDefinition Path="EstimatedRowSize" ContentDataTemplate="{StaticResource OperatorDetailDataSizeDisplay}"/> 
+            <Model:PropertyDefinition Path="ActualDataSize" ContentDataTemplate="{StaticResource OperatorDetailDataSizeDisplay}"/> 
+            <Model:PropertyDefinition Path="EstimatedDataSize" ContentDataTemplate="{StaticResource OperatorDetailDataSizeDisplay}"/> 
+            <Model:PropertyDefinition Path="DataSizeRelativeDiscrepancy"/> 
+            <Model:PropertyDefinition Path="ActualRebinds"/> 
+            <Model:PropertyDefinition Path="EstimatedRebinds"/> 
+            <Model:PropertyDefinition Path="ActualRewinds"/> 
+            <Model:PropertyDefinition Path="EstimatedRewinds"/> 
+            <Model:PropertyDefinition Path="Partitioned"/> 
+            <Model:PropertyDefinition Path="PartitionId"/> 
+            <Model:PropertyDefinition Path="ActualPartitionCount"/> 
+            <Model:PropertyDefinition Path="ActualPartitionsAccessed"/> 
+            <Model:PropertyDefinition Path="ActualExecutionMode"/> 
+            <Model:PropertyDefinition Path="EstimatedExecutionMode"/> 
+            <Model:PropertyDefinition Path="Optimized"/> 
+            <Model:PropertyDefinition Path="Parallel"/> 
+            <Model:PropertyDefinition Path="ActualBatches"/> 
+            <Model:PropertyDefinition Path="InternalInfo"/> 
+            <Model:PropertyDefinition Path="MemoryFractions"/> 
+            <Model:PropertyDefinition Path="TableCardinality" ContentDataTemplate="{StaticResource OperatorDetailDigitDisplay}"/> 
+            <Model:PropertyDefinition Path="NodeId"/> 
+            <Model:PropertyDefinition Path="GroupExecuted"/> 
+            <Model:PropertyDefinition Path="StatsCollectionId"/> 
+            <Model:PropertyDefinition Path="RemoteDataAccess"/> 
+            <Model:PropertyDefinition Path="ActionColumn"/> 
+            <Model:PropertyDefinition Path="Activation"/> 
+            <Model:PropertyDefinition Path="BitmapCreator"/> 
+            <Model:PropertyDefinition Path="ComputeSequence"/> 
+            <Model:PropertyDefinition Path="DMLRequestSort"/> 
+            <Model:PropertyDefinition Path="IndexedViewInfo"/> 
+            <Model:PropertyDefinition Path="IsPercent"/> 
+            <Model:PropertyDefinition Path="RowCount"/> 
+            <Model:PropertyDefinition Path="ManyToMany"/> 
+            <Model:PropertyDefinition Path="Name"/> 
+            <Model:PropertyDefinition Path="OriginalActionColumn"/> 
+            <Model:PropertyDefinition Path="ParameterList"/> 
+            <Model:PropertyDefinition Path="PrimaryNodeId"/> 
+            <Model:PropertyDefinition Path="SegmentColumn"/> 
+            <Model:PropertyDefinition Path="UsedUDXColumns"/> 
+            <Model:PropertyDefinition Path="Stack"/> 
+        </Model:SessionDefinition> 
+        <Model:SessionDefinition> 
+            <Model:PropertyDefinition Path="StartupExpression"/> 
+            <Model:PropertyDefinition Path="Lookup"/> 
+            <Model:PropertyDefinition Path="Ordered"/> 
+            <Model:PropertyDefinition Path="ScanDirection"/> 
+            <Model:PropertyDefinition Path="ForcedIndex"/> 
+            <Model:PropertyDefinition Path="ForceSeek"/> 
+            <Model:PropertyDefinition Path="ForceSeekColumnCount"/> 
+            <Model:PropertyDefinition Path="ForceScan"/> 
+            <Model:PropertyDefinition Path="NoExpandHint"/> 
+            <Model:PropertyDefinition Path="Storage"/> 
+            <Model:PropertyDefinition Path="PassThrough"/> 
+            <Model:PropertyDefinition Path="ProbeColumn"/> 
+            <Model:PropertyDefinition Path="StarJoinInfo"/> 
+            <Model:PropertyDefinition Path="WithOrderedPrefetch"/> 
+            <Model:PropertyDefinition Path="WithUnorderedPrefetch"/> 
+            <Model:PropertyDefinition Path="BrickRouting"/> 
+            <Model:PropertyDefinition Path="Remoting"/> 
+            <Model:PropertyDefinition Path="LocalParallelism"/> 
+            <Model:PropertyDefinition Path="InRow"/> 
+            <Model:PropertyDefinition Path="BuildResidual"/> 
+            <Model:PropertyDefinition Path="GroupBy"/> 
+            <Model:PropertyDefinition Path="HashKeysBuild"/> 
+            <Model:PropertyDefinition Path="HashKeysProbe"/> 
+            <Model:PropertyDefinition Path="ProbeResidual"/> 
+            <Model:PropertyDefinition Path="Residual"/> 
+            <Model:PropertyDefinition Path="RollupInfo"/> 
+            <Model:PropertyDefinition Path="TieColumns"/> 
+            <Model:PropertyDefinition Path="Values"/> 
+            <Model:PropertyDefinition Path="WithTies"/> 
+            <Model:PropertyDefinition Path="InnerSideJoinColumns"/> 
+        </Model:SessionDefinition> 
+        <Model:SessionDefinition> 
+            <Model:PropertyDefinition Path="RemoteQuery"/> 
+            <Model:PropertyDefinition Path="RemoteObject"/> 
+            <Model:PropertyDefinition Path="RemoteSource"/> 
+        </Model:SessionDefinition> 
+        <Model:SessionDefinition> 
+            <Model:PropertyDefinition Path="Object"/> 
+            <Model:PropertyDefinition Path="Distinct"/> 
+            <Model:PropertyDefinition Path="OffsetExpression"/> 
+            <Model:PropertyDefinition Path="TopExpression"/> 
+            <Model:PropertyDefinition Path="Rows"/> 
+        </Model:SessionDefinition> 
+        <Model:SessionDefinition> 
+            <Model:PropertyDefinition Path="SeekPredicate"/> 
+            <Model:PropertyDefinition Path="SeekPredicates"/> 
+            <Model:PropertyDefinition Path="Predicate" ContentDataTemplate="{StaticResource OperatorDetailScalarExpressionTypeDisplay}"/> 
+        </Model:SessionDefinition> 
+        <Model:SessionDefinition> 
+            <Model:PropertyDefinition Path="OuterReferences"/> 
+            <Model:PropertyDefinition Path="PartitionColumns"/> 
+        </Model:SessionDefinition> 
+        <Model:SessionDefinition> 
+            <Model:PropertyDefinition Path="OrderBy"/> 
+        </Model:SessionDefinition> 
+        <Model:SessionDefinition> 
+            <Model:PropertyDefinition Path="HashKeys"/> 
+        </Model:SessionDefinition> 
+        <Model:SessionDefinition> 
+            <Model:PropertyDefinition Path="DefinedValues"/> 
+        </Model:SessionDefinition> 
+        <Model:SessionDefinition> 
+            <Model:PropertyDefinition Path="OutputList" ContentDataTemplate="{StaticResource OperatorDetailColumnReferenceListTypeDisplay}"/> 
+        </Model:SessionDefinition> 
+        <Model:SessionDefinition> 
+            <Model:PropertyDefinition Path="Warnings"/> 
+        </Model:SessionDefinition> 
+    </Model:CollectionProperty> 
+ 
+    <Model:CollectionProperty x:Key="SummaryDefinitionData_StmtCond"> 
+        <Model:SessionDefinition> 
+            <Model:PropertyDefinition Path="EstimatedRows"/> 
+            <Model:PercentageDefinition Path="EstimatedTotalSubtreeCost" PathPercentage="EstimatedTotalSubtreeCostPercentage" /> 
+            <Model:PropertyDefinition Path="MemoryGrant"/> 
+            <Model:PropertyDefinition Path="StatementOptmLevel"/> 
+            <Model:PropertyDefinition Path="RetrievedFromCache"/> 
+            <Model:PropertyDefinition Path="StatementSetOptions"/> 
+            <Model:PropertyDefinition Path="UsePlan"/> 
+        </Model:SessionDefinition> 
+        <Model:SessionDefinition> 
+            <Model:PropertyDefinition Path="ThreadStat"/> 
+        </Model:SessionDefinition> 
+        <Model:SessionDefinition> 
+            <Model:PropertyDefinition Path="StatementText"/> 
+        </Model:SessionDefinition> 
+        <Model:SessionDefinition> 
+            <Model:PropertyDefinition Path="Warnings"/> 
+        </Model:SessionDefinition> 
+    </Model:CollectionProperty> 
+ 
+    <Model:CollectionProperty x:Key="DetailDefinitionData_StmtCond"> 
+        <Model:SessionDefinition> 
+            <Model:PropertyDefinition Path="StatementOptmEarlyAbortReason"/> 
+            <Model:PropertyDefinition Path="EstimatedRows"/> 
+            <Model:PercentageDefinition Path="EstimatedCPU" PathPercentage="EstimatedCPUPercentage" /> 
+            <Model:PercentageDefinition Path="EstimatedTotalSubtreeCost" PathPercentage="EstimatedTotalSubtreeCostPercentage" /> 
+            <Model:PropertyDefinition Path="CachedPlanSize" ContentDataTemplate="{StaticResource OperatorDetailDataSizeDisplay}"/> 
+            <Model:PropertyDefinition Path="CompileCPU"/> 
+            <Model:PropertyDefinition Path="CompileMemory"/> 
+            <Model:PropertyDefinition Path="CompileTime"/> 
+            <Model:PropertyDefinition Path="DegreeOfParallelism"/> 
+            <Model:PropertyDefinition Path="EffectiveDegreeOfParallelism"/> 
+            <Model:PropertyDefinition Path="NonParallelPlanReason"/> 
+            <Model:PropertyDefinition Path="MemoryGrant"/> 
+            <Model:PropertyDefinition Path="MemoryGrantInfo"/> 
+            <Model:PropertyDefinition Path="StatementOptmLevel"/> 
+            <Model:PropertyDefinition Path="OptimizerHardwareDependentProperties"/> 
+            <Model:PropertyDefinition Path="ParameterList"/> 
+            <Model:PropertyDefinition Path="StatementParameterizationType"/> 
+            <Model:PropertyDefinition Path="ParameterizedPlanHandle"/> 
+            <Model:PropertyDefinition Path="ParameterizedText"/> 
+            <Model:PropertyDefinition Path="RetrievedFromCache"/> 
+            <Model:PropertyDefinition Path="StatementSqlHandle"/> 
+            <Model:PropertyDefinition Path="QueryHash"/> 
+            <Model:PropertyDefinition Path="QueryPlanHash"/> 
+            <Model:PropertyDefinition Path="GuessedSelectivity"/> 
+            <Model:PropertyDefinition Path="InternalInfo"/> 
+            <Model:PropertyDefinition Path="StatementSetOptions"/> 
+            <Model:PropertyDefinition Path="ParentObjectId"/> 
+            <Model:PropertyDefinition Path="DatabaseContextSettingsId"/> 
+            <Model:PropertyDefinition Path="CardinalityEstimationModelVersion"/> 
+            <Model:PropertyDefinition Path="PhysicalOperator"/> 
+            <Model:PropertyDefinition Path="LogicalOperator"/> 
+        </Model:SessionDefinition> 
+        <Model:SessionDefinition> 
+            <Model:PropertyDefinition Path="UsePlan"/> 
+        </Model:SessionDefinition> 
+        <Model:SessionDefinition> 
+            <Model:CollectionDefinition Path="MissingIndexes.MissingIndexGroup" ItemSource="MissingIndexes.MissingIndexGroup" TreeViewItemTemplate="{StaticResource OperatorDetailMultiItems}" 
+                                        DataType="{x:Type local:MissingIndexGroupTypeDto}" Children="{StaticResource MissingIndexCollection}"/> 
+            <Model:PropertyDefinition Path="UnmatchedIndexes"/> 
+        </Model:SessionDefinition> 
+        <Model:SessionDefinition> 
+            <Model:PropertyDefinition Path="TemplatePlanGuideDB"/> 
+            <Model:PropertyDefinition Path="TemplatePlanGuideName"/> 
+            <Model:PropertyDefinition Path="PlanGuideDB"/> 
+            <Model:PropertyDefinition Path="PlanGuideName"/> 
+        </Model:SessionDefinition> 
+        <Model:SessionDefinition> 
+            <Model:PropertyDefinition Path="ThreadStat"/> 
+        </Model:SessionDefinition> 
+        <Model:SessionDefinition> 
+            <Model:PropertyDefinition Path="StatementText"/> 
+        </Model:SessionDefinition> 
+        <Model:SessionDefinition> 
+            <Model:PropertyDefinition Path="Warnings"/> 
+        </Model:SessionDefinition> 
+    </Model:CollectionProperty> 
+ 
+    <Model:CollectionProperty x:Key="SummaryDefinitionData_StmtCursor"> 
+        <Model:SessionDefinition> 
+            <Model:PropertyDefinition Path="CursorActualType"/> 
+        </Model:SessionDefinition> 
+        <Model:SessionDefinition> 
+            <Model:PropertyDefinition Path="StatementOptmEarlyAbortReason"/> 
+            <Model:PropertyDefinition Path="EstimatedRows"/> 
+            <Model:PercentageDefinition Path="EstimatedTotalSubtreeCost" PathPercentage="EstimatedTotalSubtreeCostPercentage" /> 
+            <Model:PropertyDefinition Path="MemoryGrant"/> 
+            <Model:PropertyDefinition Path="StatementOptmLevel"/> 
+            <Model:PropertyDefinition Path="RetrievedFromCache"/> 
+            <Model:PropertyDefinition Path="StatementSetOptions"/> 
+        </Model:SessionDefinition> 
+        <Model:SessionDefinition> 
+            <Model:PropertyDefinition Path="StatementText"/> 
+        </Model:SessionDefinition> 
+        <Model:SessionDefinition> 
+            <Model:PropertyDefinition Path="Warnings"/> 
+        </Model:SessionDefinition> 
+    </Model:CollectionProperty> 
+ 
+    <Model:CollectionProperty x:Key="DetailDefinitionData_StmtCursor"> 
+        <Model:SessionDefinition> 
+            <Model:PropertyDefinition Path="StatementOptmEarlyAbortReason"/> 
+            <Model:PropertyDefinition Path="EstimatedRows"/> 
+            <Model:PercentageDefinition Path="EstimatedCPU" PathPercentage="EstimatedCPUPercentage" /> 
+            <Model:PercentageDefinition Path="EstimatedTotalSubtreeCost" PathPercentage="EstimatedTotalSubtreeCostPercentage" /> 
+            <Model:PropertyDefinition Path="CursorName"/> 
+            <Model:PropertyDefinition Path="CursorActualType"/> 
+            <Model:PropertyDefinition Path="CursorConcurrency"/> 
+            <Model:PropertyDefinition Path="CursorRequestedType"/> 
+            <Model:PropertyDefinition Path="ForwardOnly"/> 
+            <Model:PropertyDefinition Path="StatementOptmLevel"/> 
+            <Model:PropertyDefinition Path="StatementParameterizationType"/> 
+            <Model:PropertyDefinition Path="ParameterizedPlanHandle"/> 
+            <Model:PropertyDefinition Path="ParameterizedText"/> 
+            <Model:PropertyDefinition Path="RetrievedFromCache"/> 
+            <Model:PropertyDefinition Path="StatementSqlHandle"/> 
+            <Model:PropertyDefinition Path="QueryHash"/> 
+            <Model:PropertyDefinition Path="QueryPlanHash"/> 
+            <Model:PropertyDefinition Path="InternalInfo"/> 
+            <Model:PropertyDefinition Path="StatementSetOptions"/> 
+            <Model:PropertyDefinition Path="ParentObjectId"/> 
+            <Model:PropertyDefinition Path="DatabaseContextSettingsId"/> 
+            <Model:PropertyDefinition Path="CardinalityEstimationModelVersion"/> 
+            <Model:PropertyDefinition Path="PhysicalOperator"/> 
+            <Model:PropertyDefinition Path="LogicalOperator"/> 
+        </Model:SessionDefinition> 
+        <Model:SessionDefinition> 
+            <Model:PropertyDefinition Path="TemplatePlanGuideDB"/> 
+            <Model:PropertyDefinition Path="TemplatePlanGuideName"/> 
+            <Model:PropertyDefinition Path="PlanGuideDB"/> 
+            <Model:PropertyDefinition Path="PlanGuideName"/> 
+        </Model:SessionDefinition> 
+        <Model:SessionDefinition> 
+            <Model:PropertyDefinition Path="StatementText"/> 
+        </Model:SessionDefinition> 
+    </Model:CollectionProperty> 
+ 
+    <Model:CollectionProperty x:Key="SummaryDefinitionData_StmtReceive"> 
+        <Model:SessionDefinition> 
+            <Model:PropertyDefinition Path="StatementOptmEarlyAbortReason"/> 
+            <Model:PropertyDefinition Path="EstimatedRows"/> 
+            <Model:PercentageDefinition Path="EstimatedTotalSubtreeCost" PathPercentage="EstimatedTotalSubtreeCostPercentage"/> 
+            <Model:PropertyDefinition Path="MemoryGrant"/> 
+            <Model:PropertyDefinition Path="ReceivePlanOperationType"/> 
+            <Model:PropertyDefinition Path="StatementOptmLevel"/> 
+            <Model:PropertyDefinition Path="RetrievedFromCache"/> 
+            <Model:PropertyDefinition Path="StatementSetOptions"/> 
+            <Model:PropertyDefinition Path="UsePlan"/> 
+        </Model:SessionDefinition> 
+        <Model:SessionDefinition> 
+            <Model:PropertyDefinition Path="Warnings"/> 
+        </Model:SessionDefinition> 
+    </Model:CollectionProperty> 
+ 
+    <Model:CollectionProperty x:Key="DetailDefinitionData_StmtReceive"> 
+        <Model:SessionDefinition> 
+            <Model:PropertyDefinition Path="StatementOptmEarlyAbortReason"/> 
+            <Model:PropertyDefinition Path="EstimatedRows"/> 
+            <Model:PercentageDefinition Path="EstimatedCPU" PathPercentage="EstimatedCPUPercentage" /> 
+            <Model:PercentageDefinition Path="EstimatedTotalSubtreeCost" PathPercentage="EstimatedTotalSubtreeCostPercentage" /> 
+            <Model:PropertyDefinition Path="CachedPlanSize" ContentDataTemplate="{StaticResource OperatorDetailDataSizeDisplay}"/> 
+            <Model:PropertyDefinition Path="CompileCPU"/> 
+            <Model:PropertyDefinition Path="CompileMemory"/> 
+            <Model:PropertyDefinition Path="CompileTime"/> 
+            <Model:PropertyDefinition Path="DegreeOfParallelism"/> 
+            <Model:PropertyDefinition Path="EffectiveDegreeOfParallelism"/> 
+            <Model:PropertyDefinition Path="NonParallelPlanReason"/> 
+            <Model:PropertyDefinition Path="MemoryGrant"/> 
+            <Model:PropertyDefinition Path="MemoryGrantInfo"/> 
+            <Model:PropertyDefinition Path="StatementOptmLevel"/> 
+            <Model:PropertyDefinition Path="OptimizerHardwareDependentProperties"/> 
+            <Model:PropertyDefinition Path="ParameterList"/> 
+            <Model:PropertyDefinition Path="StatementParameterizationType"/> 
+            <Model:PropertyDefinition Path="ParameterizedPlanHandle"/> 
+            <Model:PropertyDefinition Path="ParameterizedText"/> 
+            <Model:PropertyDefinition Path="RetrievedFromCache"/> 
+            <Model:PropertyDefinition Path="StatementSqlHandle"/> 
+            <Model:PropertyDefinition Path="QueryHash"/> 
+            <Model:PropertyDefinition Path="QueryPlanHash"/> 
+            <Model:PropertyDefinition Path="GuessedSelectivity"/> 
+            <Model:PropertyDefinition Path="InternalInfo"/> 
+            <Model:PropertyDefinition Path="StatementSetOptions"/> 
+            <Model:PropertyDefinition Path="ReceivePlanOperationType"/> 
+            <Model:PropertyDefinition Path="ParentObjectId"/> 
+            <Model:PropertyDefinition Path="DatabaseContextSettingsId"/> 
+            <Model:PropertyDefinition Path="CardinalityEstimationModelVersion"/> 
+            <Model:PropertyDefinition Path="PhysicalOperator"/> 
+            <Model:PropertyDefinition Path="LogicalOperator"/> 
+        </Model:SessionDefinition> 
+        <Model:SessionDefinition> 
+            <Model:CollectionDefinition Path="MissingIndexes.MissingIndexGroup" ItemSource="MissingIndexes.MissingIndexGroup" TreeViewItemTemplate="{StaticResource OperatorDetailMultiItems}" 
+                                        DataType="{x:Type local:MissingIndexGroupTypeDto}" Children="{StaticResource MissingIndexCollection}"/> 
+            <Model:PropertyDefinition Path="UnmatchedIndexes"/> 
+        </Model:SessionDefinition> 
+        <Model:SessionDefinition> 
+            <Model:PropertyDefinition Path="UsePlan"/> 
+        </Model:SessionDefinition> 
+        <Model:SessionDefinition> 
+            <Model:PropertyDefinition Path="TemplatePlanGuideDB"/> 
+            <Model:PropertyDefinition Path="TemplatePlanGuideName"/> 
+            <Model:PropertyDefinition Path="PlanGuideDB"/> 
+            <Model:PropertyDefinition Path="PlanGuideName"/> 
+        </Model:SessionDefinition> 
+        <Model:SessionDefinition> 
+            <Model:PropertyDefinition Path="ThreadStat"/> 
+        </Model:SessionDefinition> 
+        <Model:SessionDefinition> 
+            <Model:PropertyDefinition Path="StatementText"/> 
+        </Model:SessionDefinition> 
+        <Model:SessionDefinition> 
+            <Model:PropertyDefinition Path="Warnings"/> 
+        </Model:SessionDefinition> 
+    </Model:CollectionProperty> 
+ 
+    <Model:CollectionProperty x:Key="SummaryDefinitionData_StmtSimple"> 
+        <Model:PropertyDefinition Path="StatementOptmEarlyAbortReason"/> 
+        <Model:PropertyDefinition Path="ActualRows" ContentDataTemplate="{StaticResource OperatorDetailDigitDisplay}"/> 
+        <Model:PropertyDefinition Path="EstimatedRows"/> 
+        <Model:PercentageDefinition Path="EstimatedTotalSubtreeCost" PathPercentage="EstimatedTotalSubtreeCostPercentage" /> 
+        <Model:PropertyDefinition Path="CachedPlanSize" ContentDataTemplate="{StaticResource OperatorDetailDataSizeDisplay}"/> 
+        <Model:PropertyDefinition Path="CompileCPU"/> 
+        <Model:PropertyDefinition Path="CompileMemory"/> 
+        <Model:PropertyDefinition Path="CompileTime"/> 
+        <Model:PropertyDefinition Path="DegreeOfParallelism"/> 
+        <Model:PropertyDefinition Path="OptimizerHardwareDependentProperties.EstimatedAvailableMemoryGrant"/> 
+        <Model:PropertyDefinition Path="OptimizerHardwareDependentProperties.EstimatedAvailableDegreeOfParallelism"/> 
+        <Model:PropertyDefinition Path="OptimizerHardwareDependentProperties.EstimatedPagesCached"/> 
+        <Model:PropertyDefinition Path="MemoryGrant"/> 
+        <Model:PropertyDefinition Path="MemoryGrantInfo.DesiredMemory"/> 
+        <Model:PropertyDefinition Path="MemoryGrantInfo.GrantedMemory"/> 
+        <Model:PropertyDefinition Path="MemoryGrantInfo.GrantWaitTime"/> 
+        <Model:PropertyDefinition Path="MemoryGrantInfo.MaxUsedMemory"/> 
+        <Model:PropertyDefinition Path="MemoryGrantInfo.RequestedMemory"/> 
+        <Model:PropertyDefinition Path="MemoryGrantInfo.RequiredMemory"/> 
+        <Model:PropertyDefinition Path="MemoryGrantInfo.SerialDesiredMemory"/> 
+        <Model:PropertyDefinition Path="MemoryGrantInfo.SerialRequiredMemory"/> 
+        <Model:PropertyDefinition Path="StatementOptmLevel"/> 
+        <Model:PropertyDefinition Path="RetrievedFromCache"/> 
+        <Model:PropertyDefinition Path="UsePlan"/> 
+        <Model:SessionDefinition> 
+            <Model:PropertyDefinition Path="ThreadStat"/> 
+        </Model:SessionDefinition> 
+        <Model:SessionDefinition> 
+            <Model:PropertyDefinition Path="StatementText"/> 
+        </Model:SessionDefinition> 
+        <Model:PropertyDefinition Path="Warnings"/> 
+    </Model:CollectionProperty> 
+ 
+    <Model:CollectionProperty x:Key="DetailDefinitionData_StmtSimple"> 
+        <Model:SessionDefinition> 
+            <Model:PropertyDefinition Path="StatementOptmEarlyAbortReason"/> 
+            <Model:PropertyDefinition Path="EstimatedRows"/> 
+            <Model:PercentageDefinition Path="EstimatedCPU" PathPercentage="EstimatedCPUPercentage" /> 
+            <Model:PercentageDefinition Path="EstimatedTotalSubtreeCost" PathPercentage="EstimatedTotalSubtreeCostPercentage" /> 
+            <Model:PropertyDefinition Path="CachedPlanSize" ContentDataTemplate="{StaticResource OperatorDetailDataSizeDisplay}"/> 
+            <Model:PropertyDefinition Path="CardinalityEstimationModelVersion"/> 
+            <Model:PropertyDefinition Path="CompileCPU"/> 
+            <Model:PropertyDefinition Path="CompileMemory"/> 
+            <Model:PropertyDefinition Path="CompileTime"/> 
+            <Model:PropertyDefinition Path="DegreeOfParallelism"/> 
+            <Model:PropertyDefinition Path="EffectiveDegreeOfParallelism"/> 
+            <Model:PropertyDefinition Path="NonParallelPlanReason"/> 
+            <Model:PropertyDefinition Path="MemoryGrant"/> 
+            <Model:PropertyDefinition Path="MemoryGrantInfo"/> 
+            <Model:PropertyDefinition Path="StatementOptmLevel"/> 
+            <Model:PropertyDefinition Path="OptimizerHardwareDependentProperties"/> 
+            <Model:PropertyDefinition Path="ParameterList"/> 
+            <Model:PropertyDefinition Path="StatementParameterizationType"/> 
+            <Model:PropertyDefinition Path="ParameterizedPlanHandle"/> 
+            <Model:PropertyDefinition Path="ParameterizedText"/> 
+            <Model:PropertyDefinition Path="RetrievedFromCache"/> 
+            <Model:PropertyDefinition Path="StatementSqlHandle"/> 
+            <Model:PropertyDefinition Path="QueryHash"/> 
+            <Model:PropertyDefinition Path="QueryPlanHash"/> 
+            <Model:PropertyDefinition Path="GuessedSelectivity"/> 
+            <Model:PropertyDefinition Path="InternalInfo"/> 
+            <Model:PropertyDefinition Path="StatementSetOptions"/> 
+            <Model:PropertyDefinition Path="ParentObjectId"/> 
+            <Model:PropertyDefinition Path="DatabaseContextSettingsId"/> 
+            <Model:PropertyDefinition Path="LogicalOperator"/> 
+            <Model:PropertyDefinition Path="PhysicalOperator"/> 
+        </Model:SessionDefinition> 
+        <Model:SessionDefinition> 
+            <Model:CollectionDefinition Path="MissingIndexes.MissingIndexGroup" ItemSource="MissingIndexes.MissingIndexGroup" TreeViewItemTemplate="{StaticResource OperatorDetailMultiItems}" 
+                                        DataType="{x:Type local:MissingIndexGroupTypeDto}" Children="{StaticResource MissingIndexCollection}"/> 
+            <Model:PropertyDefinition Path="UnmatchedIndexes"/> 
+        </Model:SessionDefinition> 
+        <Model:SessionDefinition> 
+            <Model:PropertyDefinition Path="UsePlan"/> 
+        </Model:SessionDefinition> 
+        <Model:SessionDefinition> 
+            <Model:PropertyDefinition Path="TemplatePlanGuideDB"/> 
+            <Model:PropertyDefinition Path="TemplatePlanGuideName"/> 
+            <Model:PropertyDefinition Path="PlanGuideDB"/> 
+            <Model:PropertyDefinition Path="PlanGuideName"/> 
+        </Model:SessionDefinition> 
+        <Model:SessionDefinition> 
+            <Model:PropertyDefinition Path="ThreadStat"/> 
+        </Model:SessionDefinition> 
+        <Model:SessionDefinition> 
+            <Model:PropertyDefinition Path="StatementText"/> 
+        </Model:SessionDefinition> 
+        <Model:SessionDefinition> 
+            <Model:PropertyDefinition Path="Warnings"/> 
+        </Model:SessionDefinition> 
+    </Model:CollectionProperty> 
+ 
+    <Model:CollectionProperty x:Key="SummaryDefinitionData_StmtUseDb"> 
+        <Model:PropertyDefinition Path="EstimatedRows" /> 
+        <Model:PercentageDefinition Path="EstimatedTotalSubtreeCost" PathPercentage="EstimatedTotalSubtreeCostPercentage" /> 
+        <Model:SessionDefinition> 
+            <Model:PropertyDefinition Path="StatementText" /> 
+        </Model:SessionDefinition> 
+    </Model:CollectionProperty> 
+ 
+    <Model:CollectionProperty x:Key="DetailDefinitionData_StmtUseDb"> 
+        <Model:SessionDefinition> 
+            <Model:PropertyDefinition Path="StatementOptmEarlyAbortReason"/> 
+            <Model:PropertyDefinition Path="EstimatedRows"/> 
+            <Model:PercentageDefinition Path="EstimatedCPU" PathPercentage="EstimatedCPUPercentage" /> 
+            <Model:PercentageDefinition Path="EstimatedTotalSubtreeCost" PathPercentage="EstimatedTotalSubtreeCostPercentage" /> 
+            <Model:PropertyDefinition Path="StatementParameterizationType"/> 
+            <Model:PropertyDefinition Path="ParameterizedPlanHandle"/> 
+            <Model:PropertyDefinition Path="ParameterizedText"/> 
+            <Model:PropertyDefinition Path="RetrievedFromCache"/> 
+            <Model:PropertyDefinition Path="StatementSqlHandle"/> 
+            <Model:PropertyDefinition Path="QueryHash"/> 
+            <Model:PropertyDefinition Path="QueryPlanHash"/> 
+            <Model:PropertyDefinition Path="GuessedSelectivity"/> 
+            <Model:PropertyDefinition Path="ParentObjectId"/> 
+            <Model:PropertyDefinition Path="CardinalityEstimationModelVersion"/> 
+            <Model:PropertyDefinition Path="Database"/> 
+            <Model:PropertyDefinition Path="PhysicalOperator"/> 
+            <Model:PropertyDefinition Path="LogicalOperator"/> 
+        </Model:SessionDefinition> 
+        <Model:SessionDefinition> 
+            <Model:PropertyDefinition Path="TemplatePlanGuideDB"/> 
+            <Model:PropertyDefinition Path="TemplatePlanGuideName"/> 
+            <Model:PropertyDefinition Path="PlanGuideDB"/> 
+            <Model:PropertyDefinition Path="PlanGuideName"/> 
+        </Model:SessionDefinition> 
+        <Model:SessionDefinition> 
+            <Model:PropertyDefinition Path="StatementText"/> 
+        </Model:SessionDefinition> 
+    </Model:CollectionProperty> 
+ 
+    <Model:CollectionProperty x:Key="SummaryDefinitionData_StoredProc"> 
+        <Model:SessionDefinition> 
+            <Model:PercentageDefinition Path="EstimatedCost" PathPercentage="EstimatedCostPercentage" /> 
+            <Model:PercentageDefinition Path="EstimatedTotalSubtreeCost" PathPercentage="EstimatedTotalSubtreeCostPercentage" /> 
+            <Model:PropertyDefinition Path="IsNativelyCompiled" /> 
+        </Model:SessionDefinition> 
+        <Model:SessionDefinition> 
+            <Model:PropertyDefinition Path="ProcName" /> 
+        </Model:SessionDefinition> 
+    </Model:CollectionProperty> 
+ 
+    <Model:CollectionProperty x:Key="DetailDefinitionData_StoredProc"> 
+        <Model:SessionDefinition> 
+            <Model:PercentageDefinition Path="EstimatedCost" PathPercentage="EstimatedCostPercentage" /> 
+            <Model:PercentageDefinition Path="EstimatedTotalSubtreeCost" PathPercentage="EstimatedTotalSubtreeCostPercentage" /> 
+            <Model:PropertyDefinition Path="IsNativelyCompiled" /> 
+        </Model:SessionDefinition> 
+        <Model:SessionDefinition> 
+            <Model:PropertyDefinition Path="ProcName" /> 
+        </Model:SessionDefinition> 
+    </Model:CollectionProperty> 
+ 
+    <Model:CollectionProperty x:Key="SummaryDefinitionData_UDF"> 
+        <Model:SessionDefinition> 
+            <Model:PercentageDefinition Path="EstimatedCost" PathPercentage="EstimatedCostPercentage" /> 
+            <Model:PercentageDefinition Path="EstimatedTotalSubtreeCost" PathPercentage="EstimatedTotalSubtreeCostPercentage" /> 
+            <Model:PropertyDefinition Path="IsNativelyCompiled" /> 
+        </Model:SessionDefinition> 
+        <Model:SessionDefinition> 
+            <Model:PropertyDefinition Path="ProcName" /> 
+        </Model:SessionDefinition> 
+    </Model:CollectionProperty> 
+ 
+    <Model:CollectionProperty x:Key="DetailDefinitionData_UDF"> 
+        <Model:SessionDefinition> 
+            <Model:PercentageDefinition Path="EstimatedCost" PathPercentage="EstimatedCostPercentage" /> 
+            <Model:PercentageDefinition Path="EstimatedTotalSubtreeCost" PathPercentage="EstimatedTotalSubtreeCostPercentage" /> 
+            <Model:PropertyDefinition Path="IsNativelyCompiled" /> 
+        </Model:SessionDefinition> 
+        <Model:SessionDefinition> 
+            <Model:PropertyDefinition Path="ProcName" /> 
+        </Model:SessionDefinition> 
+    </Model:CollectionProperty> 
+</ResourceDictionary> 
